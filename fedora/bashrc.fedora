@@ -1,0 +1,52 @@
+# .bashrc
+# mkdir -p ~/Git
+# ln -s /home/gosu/Git/initialize/fedora/bash.fedora ~/.bashrc
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+	. /etc/bashrc
+fi
+
+# User specific environment
+if ! [[ "$PATH" =~ "$HOME/.local/bin:$HOME/bin:" ]]
+then
+    PATH="$HOME/.local/bin:$HOME/bin:$PATH"
+fi
+export PATH
+
+# Uncomment the following line if you don't like systemctl's auto-paging feature:
+# export SYSTEMD_PAGER=
+
+# User specific aliases and functions
+if [ -d ~/.bashrc.d ]; then
+	for rc in ~/.bashrc.d/*; do
+		if [ -f "$rc" ]; then
+			. "$rc"
+		fi
+	done
+fi
+
+# Alias
+alias vim='nvim'
+alias vi='nvim'
+alias sourced="source /home/gosu/Git/initialize/fedora/bashrc.fedora"
+alias vsource="nvim /home/gosu/Git/initialize/fedora/bashrc.fedora"
+alias pbcopy='xsel --clipboard --input'
+alias pbpaste='xsel --clipboard --output'
+alias gr="cd ${HOME}/Git/; ls -ltrh"
+alias rb="cd $(git rev-parse --show-toplevel)"
+
+# exports
+export CLICOLOR=1
+export LSCOLORS=CxfxBxDxhxHxbxhxhxcxcx
+export LSCOLORS=CxFxfxExBxdgfgbgAgacad
+export SOPS_AGE_KEY_FILE=''
+export KUBECTL_EXTERNAL_DIFF='/usr/local/bin/kustomize-diff.sh'
+
+# Env customizations
+PROMPT='%F{white%*%f %F{green}%~%f %F{red}${vcs_info_msg_0_}%f>
+'
+
+
+
+unset rc

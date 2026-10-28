@@ -1,0 +1,29 @@
+# Custom Zsh Prompt
+function git_prompt_info {
+  PURPLE='\033[0;35m'
+  RED='\033[0;31m'
+  NC='\033[0m' # No Color
+
+  # if we're in a git repository:
+  local in_git_repo=$(git branch --show-current 2>/dev/null)
+  if [[ "${in_git_repo}" == *"fatal: not"* ]]; then # we're not in a git repository
+    echo ""
+  else
+    GHUSER=$(git config user.name)
+    if [ "$GHUSER" != "cgoolsby" ]; then
+      echo -e "${PURPLE}${GHUSER}${NC}:${RED}${in_git_repo}${NC}"
+    else
+      echo -e "${RED}${in_git_repo}${NC}"
+    fi
+  fi
+}
+export PROMPT='%F{green}%n@%m%f %F{blue}%~%f $(git_prompt_info) %F{yellow}λ%f '
+# Right-aligned time display
+# Function to update RPROMPT with the current time before each prompt
+precmd() {
+  RPROMPT="%F{magenta}$(date +%H:%M:%S)%f"
+}
+# Enable prompt substitution to dynamically update the time
+setopt prompt_subst
+
+

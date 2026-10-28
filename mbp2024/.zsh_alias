@@ -1,0 +1,29 @@
+# Local setup
+alias 'grm'='go run main.go'
+alias 'vim'='nvim'
+alias 'k'='kubectl'
+alias 'kgp'='kubectl get pods'
+alias 'g'='git'
+alias 'gs'='git status'
+alias 'gd'='git diff'
+alias 'kc'='kubectx'
+alias 'kn'='kubens'
+alias 'ls'='ls -GFa'
+alias 'rb'='cd $(git rev-parse --show-toplevel)'
+alias 'tf'='terraform'
+alias 'resource'='source ~/.zshrc'
+
+
+# Reconcile with source
+alias 'rws'=' 
+    echo "==> global (with source)" && flux reconcile kustomization -n flux-system global --with-source &&
+    echo "==> system" && flux reconcile kustomization -n flux-system system &&
+    echo "==> operators" && flux reconcile kustomization -n flux-system operators &&
+    echo "==> observability" && flux reconcile kustomization -n flux-system observability &&
+    echo "==> clusters" && flux reconcile kustomization -n flux-system clusters
+  '
+
+phrelease() {
+    kubectl patch helmrelease "$1" -n flux-system -p '{"spec":{"suspend":true}}' --type=merge \
+      && kubectl patch helmrelease "$1" -n flux-system -p '{"spec":{"suspend":false}}' --type=merge
+  }
